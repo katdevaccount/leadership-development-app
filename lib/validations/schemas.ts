@@ -11,10 +11,31 @@ import { z } from 'zod'
 
 export const userRoleSchema = z.enum(['client', 'coach'])
 
+/**
+ * Phone number validation - E.164 format or empty string.
+ * E.164 format: +[country code][number], e.g., +14155551234
+ */
+export const phoneSchema = z
+  .string()
+  .refine(
+    (val) => val === '' || /^\+[1-9]\d{1,14}$/.test(val),
+    'Enter phone in format +1234567890'
+  )
+
 export const userProfileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   email: z.string().email('Invalid email address'),
   phone: z.string().optional().nullable(),
+})
+
+/**
+ * Schema for updating user profile (settings page).
+ */
+export const updateProfileSchema = z.object({
+  userId: z.string().uuid('Invalid user ID'),
+  name: z.string().min(1, 'Name is required').max(100).optional(),
+  phone: phoneSchema.optional(),
+  receiveWeeklyNudge: z.boolean().optional(),
 })
 
 // ============================================================================
@@ -86,3 +107,4 @@ export type SaveWeeklyActionsInput = z.infer<typeof saveWeeklyActionsSchema>
 export type UpdateNudgePreferenceInput = z.infer<typeof updateNudgePreferenceSchema>
 export type ToggleActionCompleteInput = z.infer<typeof toggleActionCompleteSchema>
 export type SendNudgeInput = z.infer<typeof sendNudgeSchema>
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>

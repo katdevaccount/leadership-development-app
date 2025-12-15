@@ -18,6 +18,7 @@ interface UserData {
 export default function WelcomePage() {
   const [user, setUser] = useState<UserData | null>(null)
   const [mondayNudge, setMondayNudge] = useState(true)
+  const [phone, setPhone] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -36,6 +37,12 @@ export default function WelcomePage() {
   const handleEnterApp = async () => {
     if (!user) return
 
+    // Validate phone if provided
+    if (phone && !/^\+[1-9]\d{1,14}$/.test(phone)) {
+      setError("Phone must be in format +1234567890 (e.g., +14155551234)")
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -49,6 +56,19 @@ export default function WelcomePage() {
         setError("Session expired. Please sign in again.")
         router.push("/")
         return
+      }
+
+      // Save phone number if provided
+      if (phone) {
+        const { error: phoneError } = await supabase
+          .from('users')
+          .update({ phone })
+          .eq('id', authUser.id)
+
+        if (phoneError) {
+          console.error('Error saving phone:', phoneError)
+          // Don't block - continue anyway
+        }
       }
 
       // Save development theme if provided
@@ -202,11 +222,33 @@ export default function WelcomePage() {
               We'll use your development theme and vision of progress to help you design small weekly actions.
             </motion.p>
 
-            {/* Monday Nudge Toggle */}
+            {/* Phone Number Input */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.6 }}
+              className="w-full mb-6"
+            >
+              <label className="block text-sm font-mono text-gray-600 mb-2 text-left">
+                Phone Number (optional)
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+1234567890"
+                className="w-full px-4 py-3 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
+              />
+              <p className="mt-2 text-xs text-gray-500 font-mono text-left">
+                Required to receive SMS nudges from your coach
+              </p>
+            </motion.div>
+
+            {/* Monday Nudge Toggle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.6 }}
               className="flex items-center justify-center gap-3 mb-8 px-6 py-4 bg-[#f0f3fa] rounded-2xl shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]"
             >
               <Switch
@@ -223,7 +265,7 @@ export default function WelcomePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0, duration: 0.6 }}
+              transition={{ delay: 1.1, duration: 0.6 }}
               className="flex flex-wrap gap-2 justify-center mb-8"
             >
               <div className="px-4 py-2 bg-[#f0f3fa] rounded-full text-sm font-mono text-gray-600 shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff]">
@@ -252,7 +294,7 @@ export default function WelcomePage() {
             <motion.button
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
+              transition={{ delay: 1.3, duration: 0.6 }}
               onClick={handleEnterApp}
               disabled={isLoading}
               whileHover={{ scale: isLoading ? 1 : 1.05 }}

@@ -5,6 +5,7 @@ import { getClientHomeSummary } from '@/lib/queries/client'
 import { ThemeCard } from '@/components/client/theme-card'
 import { WeeklyActionsList } from '@/components/client/weekly-actions-list'
 import { ProgressTimeline } from '@/components/client/progress-timeline'
+import { PhoneMissingBanner } from '@/components/client/phone-missing-banner'
 import { AppHeader } from '@/components/app-header'
 
 export default async function ClientHomePage() {
@@ -24,6 +25,9 @@ export default async function ClientHomePage() {
       <AppHeader userName={profile?.name} userRole="client" />
 
       <div className="container mx-auto py-8 px-4 max-w-4xl">
+        {/* Phone missing banner */}
+        {!profile?.phone && <PhoneMissingBanner />}
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-700 font-mono">
