@@ -70,7 +70,7 @@ export default async function ClientHomePage() {
                 <p className="text-sm text-gray-500 font-mono">Your recent reflections and updates</p>
               </div>
             </div>
-            <ProgressTimeline entries={progressEntries} />
+            <ProgressTimeline entries={progressEntries} userId={user.id} />
           </div>
         </div>
       </div>
