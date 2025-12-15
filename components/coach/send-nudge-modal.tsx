@@ -9,6 +9,8 @@ interface SendNudgeModalProps {
   clientId: string
   clientName: string
   clientPhone: string | null
+  developmentTheme?: string | null
+  latestProgress?: string | null
 }
 
 export function SendNudgeModal({
@@ -17,6 +19,8 @@ export function SendNudgeModal({
   clientId,
   clientName,
   clientPhone,
+  developmentTheme,
+  latestProgress,
 }: SendNudgeModalProps) {
   const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -120,9 +124,26 @@ export function SendNudgeModal({
                 Send Nudge to {clientName}
               </h2>
               <p className="text-sm text-gray-500 font-mono mt-1">
-                Send an SMS nudge to encourage {clientName}. The message will be
-                delivered to {clientPhone || 'their phone'}.
+                Send an SMS nudge to encourage {clientName}.
               </p>
+
+              {/* Optional context */}
+              {(developmentTheme || latestProgress) && (
+                <div className="mt-4 p-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
+                  {developmentTheme && (
+                    <div className="mb-2">
+                      <span className="text-xs font-medium text-gray-500 font-mono">Theme: </span>
+                      <span className="text-xs text-gray-600 font-mono">{developmentTheme}</span>
+                    </div>
+                  )}
+                  {latestProgress && (
+                    <div>
+                      <span className="text-xs font-medium text-gray-500 font-mono">Latest: </span>
+                      <span className="text-xs text-gray-600 font-mono line-clamp-2">{latestProgress}</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Message input */}
@@ -131,7 +152,7 @@ export function SendNudgeModal({
                 Message
               </label>
               <textarea
-                placeholder="Write an encouraging message..."
+                placeholder="Write a short nudge (1–2 sentences)…"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onFocus={() => setIsFocused(true)}

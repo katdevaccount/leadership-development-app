@@ -113,43 +113,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. POST to n8n webhook (if configured)
-    const webhookUrl = process.env.N8N_SEND_NUDGE_WEBHOOK
+    // 5. POST to n8n webhook
+    const webhookUrl = process.env.N8N_SEND_NUDGE_WEBHOOK || 'https://n8n-familyconnection.agentglu.agency/webhook/send-nudge'
     let webhookSuccess = false
     let webhookError: string | null = null
 
-    if (webhookUrl) {
-      try {
-        const webhookPayload = {
-          client_id: clientId,
-          client_name: client.name,
-          phone: client.phone,
-          message_text: messageText,
-          nudge_id: nudge.id,
-          sent_at: nudge.sent_at,
-        }
+    try {
+      const webhookPayload = {
+        type: 'manual_nudge',
+        nudge_id: nudge.id,
+        client_id: clientId,
+        client_name: client.name,
+        phone: client.phone,
+        message: messageText,
+      }
 
-        const webhookResponse = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(webhookPayload),
-        })
+      const webhookResponse = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookPayload),
+      })
 
-        if (webhookResponse.ok) {
-          webhookSuccess = true
-        } else {
-          webhookError = `Webhook returned status ${webhookResponse.status}`
-          console.error('Webhook error:', webhookError)
-        }
-      } catch (err) {
-        webhookError = err instanceof Error ? err.message : 'Unknown webhook error'
+      if (webhookResponse.ok) {
+        webhookSuccess = true
+      } else {
+        webhookError = `Webhook returned status ${webhookResponse.status}`
         console.error('Webhook error:', webhookError)
       }
-    } else {
-      // No webhook configured - log for debugging
-      console.log('N8N_SEND_NUDGE_WEBHOOK not configured. Nudge recorded but not sent.')
+    } catch (err) {
+      webhookError = err instanceof Error ? err.message : 'Unknown webhook error'
+      console.error('Webhook error:', webhookError)
     }
 
     // 6. Return success response

@@ -131,6 +131,8 @@ export function ClientCard({ client }: ClientCardProps) {
         clientId={user.id}
         clientName={user.name}
         clientPhone={user.phone}
+        developmentTheme={currentTheme?.theme_text}
+        latestProgress={latestProgress?.text}
       />
     </>
   )
