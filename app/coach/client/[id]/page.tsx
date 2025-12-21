@@ -123,7 +123,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Sparkles className="w-4 h-4 text-[#8B1E3F]" />
-                      <h4 className="text-sm font-semibold text-gray-600 font-mono">Success Description</h4>
+                      <h4 className="text-sm font-semibold text-gray-600 font-mono">Envisioned Future</h4>
                     </div>
                     {theme.success_description ? (
                       <div className="px-4 py-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
@@ -133,7 +133,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
                       </div>
                     ) : (
                       <p className="text-sm text-gray-400 font-mono italic">
-                        No success description set.
+                        No vision described yet.
                       </p>
                     )}
                   </div>
@@ -143,7 +143,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
                     <div className="flex items-center gap-2 mb-2">
                       <MessageCircle className="w-4 h-4 text-[#8B1E3F]" />
                       <h4 className="text-sm font-semibold text-gray-600 font-mono">
-                        Success Hypotheses ({hypotheses.length})
+                        Ideas & Experiments ({hypotheses.length})
                       </h4>
                     </div>
                     {hypotheses.length > 0 ? (
@@ -160,7 +160,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
                       </ul>
                     ) : (
                       <p className="text-sm text-gray-400 font-mono italic">
-                        No hypotheses added yet.
+                        No ideas captured yet.
                       </p>
                     )}
                   </div>

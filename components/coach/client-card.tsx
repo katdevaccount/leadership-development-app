@@ -82,7 +82,7 @@ export function ClientCard({ client }: ClientCardProps) {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-500 font-mono">
               <Lightbulb className="h-4 w-4" />
-              Success Hypotheses
+              Ideas & Experiments
             </div>
             <span className="px-3 py-1 rounded-full text-xs font-mono bg-[#f0f3fa] text-gray-600 shadow-[3px_3px_6px_#d1d9e6,-3px_-3px_6px_#ffffff]">
               {hypothesesCount}
@@ -90,17 +90,17 @@ export function ClientCard({ client }: ClientCardProps) {
           </div>
           {hypothesesCount > 0 ? (
             <p className="text-xs text-gray-500 font-mono">
-              {hypothesesCount} hypothesis{hypothesesCount !== 1 ? 'es' : ''} defined
+              {hypothesesCount} idea{hypothesesCount !== 1 ? 's' : ''} captured
             </p>
           ) : (
-            <p className="text-sm text-gray-400 italic font-mono">No hypotheses yet</p>
+            <p className="text-sm text-gray-400 italic font-mono">No ideas yet</p>
           )}
         </div>
 
         {/* View Details hint */}
         <div className="mt-4 pt-4 border-t border-gray-200">
           <p className="text-xs text-gray-400 font-mono text-center group-hover:text-[#8B1E3F] transition-colors">
-            Click to view full canvas
+            View full canvas
           </p>
         </div>
       </Link>

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { Users, CheckSquare, AlertCircle } from 'lucide-react'
+import { Users, Lightbulb, AlertCircle } from 'lucide-react'
 import { getUser } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/server'
 import {
@@ -64,22 +64,19 @@ export default async function CoachDashboardPage() {
             </p>
           </div>
 
-          {/* Actions Completed */}
+          {/* Ideas Captured */}
           <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-gray-600 font-mono">Actions Completed</span>
+              <span className="text-sm font-medium text-gray-600 font-mono">Ideas Captured</span>
               <div className="w-10 h-10 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
-                <CheckSquare className="h-5 w-5 text-[#8B1E3F]" />
+                <Lightbulb className="h-5 w-5 text-[#8B1E3F]" />
               </div>
             </div>
             <div className="text-3xl font-bold text-gray-700 font-mono">
-              {stats.totalCompletedActions}
-              <span className="text-lg font-normal text-gray-400">
-                /{stats.totalCompletedActions + stats.totalOpenActions}
-              </span>
+              {stats.totalCompletedActions + stats.totalOpenActions}
             </div>
             <p className="text-xs text-gray-500 mt-1 font-mono">
-              {stats.totalOpenActions} actions still open
+              across all clients
             </p>
           </div>
 

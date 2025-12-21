@@ -124,7 +124,7 @@ export function SendNudgeModal({
                 Send Nudge to {clientName}
               </h2>
               <p className="text-sm text-gray-500 font-mono mt-1">
-                Send an SMS nudge to encourage {clientName}.
+                Send a reflective prompt to {clientName}.
               </p>
 
               {/* Optional context */}
