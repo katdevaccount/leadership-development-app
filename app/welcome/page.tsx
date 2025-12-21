@@ -6,12 +6,19 @@ import { CheckCircle, Sparkles, Loader2, Plus, X, Lightbulb } from "lucide-react
 import { Switch } from "@/components/ui/switch"
 import { createClient } from "@/lib/supabase/client"
 
+interface ThemeEntry {
+  name: string
+  successDescription?: string
+}
+
 interface UserData {
   email: string
   name?: string
   userId?: string
   loginTime: string
   leadershipPurpose?: string
+  themes?: ThemeEntry[]
+  // Backward compat
   themeName?: string
   successDescription?: string
 }
@@ -97,24 +104,28 @@ export default function WelcomePage() {
         }
       }
 
-      // Save development theme with success description
+      // Save all development themes with success descriptions
       let themeId: string | null = null
-      if (user.themeName) {
-        const { data: themeData, error: themeError } = await supabase
-          .from('development_themes')
-          .insert({
-            user_id: authUser.id,
-            theme_text: user.themeName,
-            success_description: user.successDescription || null,
-            theme_order: 1,
-          })
-          .select('id')
-          .single()
+      const themesToSave = user.themes || (user.themeName ? [{ name: user.themeName, successDescription: user.successDescription }] : [])
 
-        if (themeError) {
-          console.error('Error saving theme:', themeError)
-        } else {
-          themeId = themeData.id
+      if (themesToSave.length > 0) {
+        const themeInserts = themesToSave.map((theme, index) => ({
+          user_id: authUser.id,
+          theme_text: theme.name,
+          success_description: theme.successDescription || null,
+          theme_order: index + 1,
+        }))
+
+        const { data: themesData, error: themesError } = await supabase
+          .from('development_themes')
+          .insert(themeInserts)
+          .select('id')
+
+        if (themesError) {
+          console.error('Error saving themes:', themesError)
+        } else if (themesData && themesData[0]) {
+          // Link hypotheses to first theme
+          themeId = themesData[0].id
         }
       }
 
@@ -150,7 +161,7 @@ export default function WelcomePage() {
       localStorage.removeItem("dummyUser")
 
       // Navigate to client home
-      window.location.href = "/client/home"
+      router.push("/client/home")
 
     } catch (err) {
       console.error('Error during onboarding completion:', err)
@@ -216,7 +227,7 @@ export default function WelcomePage() {
             Almost there!
           </h1>
           <p className="text-gray-500 font-mono mb-6 text-sm">
-            Add a few initial hypotheses for how you'll make progress on <span className="text-[#8B1E3F]">{user.themeName}</span>.
+            Add a few initial hypotheses for how you'll make progress on your {user.themes?.length === 1 ? 'theme' : 'themes'}.
           </p>
 
           {/* Hypotheses Input */}
@@ -229,12 +240,11 @@ export default function WelcomePage() {
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="w-4 h-4 text-[#8B1E3F]" />
               <label className="text-sm font-mono text-gray-600 text-left">
-                Success Hypotheses
+                Ideas & Experiments
               </label>
-              <span className="text-xs text-gray-400 font-mono">(optional)</span>
             </div>
             <p className="text-xs text-gray-400 font-mono text-left mb-3">
-              What experiments or strategies will you try?
+              Add a few ideas now, or refine them later in the app.
             </p>
             <div className="space-y-2">
               {hypotheses.map((hypothesis, index) => (
@@ -277,7 +287,7 @@ export default function WelcomePage() {
             className="w-full mb-6"
           >
             <label className="block text-sm font-mono text-gray-600 mb-2 text-left">
-              Phone Number (optional)
+              Phone Number
             </label>
             <input
               type="tel"
@@ -287,7 +297,7 @@ export default function WelcomePage() {
               className="w-full px-4 py-3 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
             />
             <p className="mt-2 text-xs text-gray-500 font-mono text-left">
-              Required to receive SMS nudges from your coach
+              Required for SMS nudges. You can add this later in Settings.
             </p>
           </motion.div>
 
@@ -316,10 +326,10 @@ export default function WelcomePage() {
             className="flex flex-wrap gap-2 justify-center mb-6"
           >
             <div className="px-3 py-1.5 bg-[#f0f3fa] rounded-full text-xs font-mono text-gray-600 shadow-[3px_3px_6px_#d1d9e6,-3px_-3px_6px_#ffffff]">
-              Theme: {user.themeName}
+              {user.themes?.length || 1} {(user.themes?.length || 1) === 1 ? 'theme' : 'themes'}
             </div>
             <div className="px-3 py-1.5 bg-[#f0f3fa] rounded-full text-xs font-mono text-gray-600 shadow-[3px_3px_6px_#d1d9e6,-3px_-3px_6px_#ffffff]">
-              {hypotheses.filter(h => h.trim()).length} hypotheses
+              {hypotheses.filter(h => h.trim()).length} ideas
             </div>
           </motion.div>
 

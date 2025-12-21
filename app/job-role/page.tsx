@@ -3,21 +3,28 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { Compass, Target, ArrowLeft, ArrowRight } from "lucide-react"
+import { Compass, Target, ArrowLeft, ArrowRight, Plus, X } from "lucide-react"
+
+interface ThemeEntry {
+  name: string
+  successDescription?: string
+}
 
 interface DummyUser {
   email: string
   loginTime: string
   leadershipPurpose?: string
+  themes?: ThemeEntry[]
+  // Backward compat
   themeName?: string
 }
 
 export default function JobRolePage() {
   const [user, setUser] = useState<DummyUser | null>(null)
   const [leadershipPurpose, setLeadershipPurpose] = useState("")
-  const [themeName, setThemeName] = useState("")
+  const [themes, setThemes] = useState<string[]>([''])
   const [purposeFocused, setPurposeFocused] = useState(false)
-  const [themeFocused, setThemeFocused] = useState(false)
+  const [focusedThemeIndex, setFocusedThemeIndex] = useState<number | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -28,20 +35,47 @@ export default function JobRolePage() {
       return
     }
 
-    const userData = JSON.parse(dummyUser)
+    const userData = JSON.parse(dummyUser) as DummyUser
     setUser(userData)
     if (userData.leadershipPurpose) setLeadershipPurpose(userData.leadershipPurpose)
-    if (userData.themeName) setThemeName(userData.themeName)
+
+    // Load existing themes or fallback to single themeName
+    if (userData.themes && userData.themes.length > 0) {
+      setThemes(userData.themes.map(t => t.name))
+    } else if (userData.themeName) {
+      setThemes([userData.themeName])
+    }
   }, [router])
 
-  const handleContinue = () => {
-    if (!themeName.trim() || !user) return
+  const addTheme = () => {
+    if (themes.length < 3) {
+      setThemes([...themes, ''])
+    }
+  }
 
-    // Update user data with purpose and theme
+  const removeTheme = (index: number) => {
+    if (themes.length > 1) {
+      setThemes(themes.filter((_, i) => i !== index))
+    }
+  }
+
+  const updateTheme = (index: number, value: string) => {
+    const updated = [...themes]
+    updated[index] = value
+    setThemes(updated)
+  }
+
+  const handleContinue = () => {
+    const validThemes = themes.filter(t => t.trim())
+    if (validThemes.length === 0 || !user) return
+
+    // Update user data with purpose and themes
     const updatedUser = {
       ...user,
       leadershipPurpose: leadershipPurpose.trim() || undefined,
-      themeName: themeName.trim(),
+      themes: validThemes.map(name => ({ name: name.trim() })),
+      // Keep backward compat
+      themeName: validThemes[0],
     }
     localStorage.setItem("dummyUser", JSON.stringify(updatedUser))
 
@@ -52,6 +86,8 @@ export default function JobRolePage() {
   const handleGoBack = () => {
     router.push("/onboarding")
   }
+
+  const hasValidTheme = themes.some(t => t.trim())
 
   if (!user) {
     return (
@@ -100,7 +136,7 @@ export default function JobRolePage() {
           />
         </motion.div>
 
-        {/* Theme Name Section */}
+        {/* Development Themes Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -112,43 +148,72 @@ export default function JobRolePage() {
               <Target className="w-5 h-5 text-[#8B1E3F]" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 font-mono">First Development Theme</h2>
-              <p className="text-sm text-gray-500 font-mono">Required - What do you want to work on as a leader? (1-4 words)</p>
+              <h2 className="text-lg font-semibold text-gray-700 font-mono">Development Themes</h2>
+              <p className="text-sm text-gray-500 font-mono">What do you want to work on as a leader? (up to 3)</p>
             </div>
           </div>
-          <input
-            type="text"
-            value={themeName}
-            onChange={(e) => setThemeName(e.target.value)}
-            onFocus={() => setThemeFocused(true)}
-            onBlur={() => setThemeFocused(false)}
-            placeholder="e.g., Delegation, Presence, Clarity"
-            className={`w-full px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono ${
-              themeFocused
-                ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
-                : "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]"
-            }`}
-          />
 
-          {/* Suggested themes */}
-          <div className="mt-4">
-            <p className="text-xs text-gray-400 font-mono mb-2">Or choose from suggestions:</p>
-            <div className="flex flex-wrap gap-2">
-              {["Delegation", "Presence", "Clarity", "Trust", "Boundaries", "Strategy", "Balance"].map((suggestion) => (
-                <button
-                  key={suggestion}
-                  onClick={() => setThemeName(suggestion)}
-                  className={`px-3 py-1.5 text-sm font-mono rounded-xl transition-all duration-200 ${
-                    themeName === suggestion
-                      ? "bg-[#8B1E3F] text-white shadow-[2px_2px_4px_#d1d9e6]"
-                      : "bg-[#f0f3fa] text-gray-600 shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]"
+          {/* Theme inputs */}
+          <div className="space-y-3">
+            {themes.map((theme, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <span className="text-sm text-gray-400 font-mono w-6">{index + 1}.</span>
+                <input
+                  type="text"
+                  value={theme}
+                  onChange={(e) => updateTheme(index, e.target.value)}
+                  onFocus={() => setFocusedThemeIndex(index)}
+                  onBlur={() => setFocusedThemeIndex(null)}
+                  placeholder={index === 0 ? "e.g., Delegation, Presence, Clarity" : "Another theme (1-4 words)"}
+                  className={`flex-1 px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono ${
+                    focusedThemeIndex === index
+                      ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
+                      : "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]"
                   }`}
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
+                />
+                {themes.length > 1 && (
+                  <button
+                    onClick={() => removeTheme(index)}
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
+
+          {/* Add theme button */}
+          {themes.length < 3 && (
+            <button
+              onClick={addTheme}
+              className="mt-3 flex items-center gap-2 text-sm text-gray-500 hover:text-[#8B1E3F] font-mono transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Add another theme ({themes.length}/3)
+            </button>
+          )}
+          {themes.length >= 3 && (
+            <p className="mt-3 text-xs text-gray-400 font-mono">Maximum of 3 themes reached</p>
+          )}
+
+          {/* Suggested themes - only show for first empty theme */}
+          {themes[0] === '' && (
+            <div className="mt-4">
+              <p className="text-xs text-gray-400 font-mono mb-2">Or choose from suggestions:</p>
+              <div className="flex flex-wrap gap-2">
+                {["Delegation", "Presence", "Clarity", "Trust", "Boundaries", "Strategy", "Balance"].map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    onClick={() => updateTheme(0, suggestion)}
+                    className="px-3 py-1.5 text-sm font-mono rounded-xl transition-all duration-200 bg-[#f0f3fa] text-gray-600 shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Navigation Buttons */}
@@ -168,9 +233,9 @@ export default function JobRolePage() {
 
           <button
             onClick={handleContinue}
-            disabled={!themeName.trim()}
+            disabled={!hasValidTheme}
             className={`px-6 py-3 bg-[#f0f3fa] rounded-2xl font-semibold shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] hover:shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] active:shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 flex items-center gap-2 font-mono ${
-              themeName.trim() ? "text-[#8B1E3F]" : "text-gray-400 opacity-50 cursor-not-allowed"
+              hasValidTheme ? "text-[#8B1E3F]" : "text-gray-400 opacity-50 cursor-not-allowed"
             }`}
           >
             Continue
