@@ -7,11 +7,10 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Leadership Development',
+  description: 'Your leadership development space',
   icons: {
-    icon: '/icon.svg',
+    icon: '/kat-logo.png',
   },
 }
 
