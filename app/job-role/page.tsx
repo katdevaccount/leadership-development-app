@@ -118,7 +118,7 @@ export default function JobRolePage() {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-700 font-mono">Leadership Purpose</h2>
-              <p className="text-sm text-gray-500 font-mono">Optional - What kind of leader do you want to become?</p>
+              <p className="text-sm text-gray-500 font-mono">Why do you do what you do? (optional)</p>
             </div>
           </div>
           <textarea
@@ -126,9 +126,9 @@ export default function JobRolePage() {
             onChange={(e) => setLeadershipPurpose(e.target.value)}
             onFocus={() => setPurposeFocused(true)}
             onBlur={() => setPurposeFocused(false)}
-            placeholder="e.g., A leader who empowers others to make decisions and grow..."
+            placeholder="e.g., To create environments where people thrive and grow..."
             rows={3}
-            className={`w-full px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono resize-none ${
+            className={`w-full px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none ${
               purposeFocused
                 ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
                 : "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]"
@@ -165,7 +165,7 @@ export default function JobRolePage() {
                   onFocus={() => setFocusedThemeIndex(index)}
                   onBlur={() => setFocusedThemeIndex(null)}
                   placeholder={index === 0 ? "e.g., Delegation, Presence, Clarity" : "Another theme (1-4 words)"}
-                  className={`flex-1 px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono ${
+                  className={`flex-1 px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono ${
                     focusedThemeIndex === index
                       ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
                       : "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]"

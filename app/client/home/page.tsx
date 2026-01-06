@@ -32,7 +32,10 @@ export default async function ClientHomePage() {
             Welcome back{profile?.name ? `, ${profile.name}` : ''}
           </h1>
           <p className="text-gray-500 mt-1 font-mono">
-            Your leadership development canvas
+            Your leadership development space
+          </p>
+          <p className="text-sm text-gray-400 font-mono mt-2 max-w-lg">
+            If you don't know where you're going, you won't get there. Writing down your intentions increases the likelihood of meaningful change.
           </p>
         </div>
 

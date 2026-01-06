@@ -185,7 +185,7 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-[#8B1E3F]" />
           <h4 className="text-sm font-semibold text-gray-600 font-mono">Envisioned Future</h4>
-          <span className="text-xs text-gray-400 font-mono">What will be different?</span>
+          <span className="text-xs text-gray-400 font-mono">What will be different? Start with 'I'...</span>
         </div>
 
         {isEditingDesc ? (
@@ -204,11 +204,11 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
                   setDescError(null)
                 }
               }}
-              placeholder="Describe how you'll feel, act, and show up differently. What will others notice? What will feel easier?"
+              placeholder="I feel... I do... Others notice... (describe your future self)"
               disabled={isDescPending}
               autoFocus
               rows={4}
-              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-sm text-gray-700 placeholder-gray-400 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
+              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-sm text-gray-700 placeholder-gray-500 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
                 isDescPending ? 'opacity-50' : ''
               }`}
             />
@@ -256,7 +256,7 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
             className="w-full px-4 py-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] text-left hover:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] transition-all"
           >
             <p className="text-sm text-gray-400 font-mono italic">
-              Describe your envisioned future...
+              Describe your envisioned future — start with 'I'...
             </p>
           </button>
         )}

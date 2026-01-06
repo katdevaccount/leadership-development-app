@@ -227,7 +227,7 @@ export default function WelcomePage() {
             Almost there!
           </h1>
           <p className="text-gray-500 font-mono mb-6 text-sm">
-            Add a few initial hypotheses for how you'll make progress on your {user.themes?.length === 1 ? 'theme' : 'themes'}.
+            What experiments, principles, or reminders will guide your progress?
           </p>
 
           {/* Hypotheses Input */}
@@ -244,7 +244,7 @@ export default function WelcomePage() {
               </label>
             </div>
             <p className="text-xs text-gray-400 font-mono text-left mb-3">
-              Add a few ideas now, or refine them later in the app.
+              Things to stop, start, or do differently. Mantras, principles, or small experiments.
             </p>
             <div className="space-y-2">
               {hypotheses.map((hypothesis, index) => (
@@ -254,8 +254,8 @@ export default function WelcomePage() {
                     type="text"
                     value={hypothesis}
                     onChange={(e) => updateHypothesis(index, e.target.value)}
-                    placeholder={`e.g., ${index === 0 ? 'Let others make decisions' : index === 1 ? 'Ask questions before giving advice' : 'Start with small experiments'}`}
-                    className="flex-1 px-3 py-2 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono text-sm shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
+                    placeholder={`e.g., ${index === 0 ? 'Pause before saying yes' : index === 1 ? "Ask 'What do you think?' first" : 'Delegate one thing each day'}`}
+                    className="flex-1 px-3 py-2 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono text-sm shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
                   />
                   {hypotheses.length > 1 && (
                     <button
@@ -294,7 +294,7 @@ export default function WelcomePage() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+1234567890"
-              className="w-full px-4 py-3 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
+              className="w-full px-4 py-3 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80]"
             />
             <p className="mt-2 text-xs text-gray-500 font-mono text-left">
               Required for SMS nudges. You can add this later in Settings.

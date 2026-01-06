@@ -74,7 +74,7 @@ export function AddThemeButton({ currentThemeCount }: AddThemeButtonProps) {
               placeholder="e.g., Delegation, Presence, Clarity"
               disabled={isPending}
               autoFocus
-              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-400 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 ${
+              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-500 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 ${
                 isPending ? 'opacity-50' : ''
               }`}
             />

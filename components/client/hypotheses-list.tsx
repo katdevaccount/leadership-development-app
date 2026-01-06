@@ -52,7 +52,7 @@ export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
       <div className="flex items-center justify-between">
         <div>
           <h4 className="text-sm font-semibold text-gray-600 font-mono">Ideas & Experiments</h4>
-          <p className="text-xs text-gray-400 font-mono">Principles, mantras, or experiments you want to try</p>
+          <p className="text-xs text-gray-400 font-mono">Stop, start, continue. Do more, less, differently.</p>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
       {/* Empty state */}
       {hypotheses.length === 0 && !isAdding && (
         <p className="text-sm text-gray-400 font-mono italic py-2">
-          What ideas might help? Add principles, experiments, or reminders.
+          What will you stop, start, or do differently?
         </p>
       )}
 
@@ -90,10 +90,10 @@ export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
                 value={newText}
                 onChange={(e) => setNewText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="A principle, experiment, or reminder..."
+                placeholder="A principle, experiment, or mantra..."
                 disabled={isPending}
                 autoFocus
-                className={`flex-1 px-3 py-2 bg-[#f0f3fa] rounded-lg text-sm text-gray-700 placeholder-gray-400 font-mono outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 ${
+                className={`flex-1 px-3 py-2 bg-[#f0f3fa] rounded-lg text-sm text-gray-700 placeholder-gray-500 font-mono outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 ${
                   isPending ? 'opacity-50' : ''
                 }`}
               />

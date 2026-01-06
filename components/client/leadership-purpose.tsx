@@ -53,7 +53,7 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
           </div>
           <div>
             <h2 className="text-base font-medium text-gray-700 font-mono">Leadership Purpose</h2>
-            <p className="text-sm text-gray-400 font-mono">Your north star — optional</p>
+            <p className="text-sm text-gray-400 font-mono">Why do you do what you do? (optional)</p>
           </div>
         </div>
         {!isEditing && (
@@ -73,11 +73,11 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="The kind of leader you aspire to be..."
+            placeholder="Your purpose as a leader..."
             disabled={isPending}
             autoFocus
             rows={3}
-            className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-400 font-mono text-base outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
+            className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-500 font-mono text-base outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
               isPending ? 'opacity-50' : ''
             }`}
           />
@@ -115,7 +115,7 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
           className="w-full px-5 py-4 bg-[#f0f3fa] rounded-xl shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] text-left"
         >
           <p className="text-sm text-gray-400 font-mono italic">
-            Add a guiding purpose...
+            Add your leadership purpose...
           </p>
         </button>
       )}

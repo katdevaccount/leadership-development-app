@@ -103,12 +103,12 @@ export default function CompanyInfoPage() {
             <Sparkles className="w-6 h-6 text-[#8B1E3F]" />
           </div>
           <h1 className="text-2xl font-bold text-gray-700 mb-2 font-mono">
-            {themeNames.length === 1 ? "How does success look like?" : "Envision success for each theme"}
+            {themeNames.length === 1 ? "What will be different?" : "Envision success for each theme"}
           </h1>
           <p className="text-gray-500 font-mono">
             {themeNames.length === 1
-              ? "Describe your envisioned future when you've made progress on this theme."
-              : "Describe what progress looks like for each of your development themes."
+              ? "Describe your envisioned future. Start with 'I' and describe what you do, feel, and experience."
+              : "Describe what progress looks like for each theme. Start with 'I'..."
             }
           </p>
         </div>
@@ -134,9 +134,9 @@ export default function CompanyInfoPage() {
                 onChange={(e) => updateDescription(index, e.target.value)}
                 onFocus={() => setFocusedIndex(index)}
                 onBlur={() => setFocusedIndex(null)}
-                placeholder='For example: "I trust my team to handle decisions. I ask questions before offering solutions. I feel calm knowing others can lead without me."'
+                placeholder={`Start with "I" — e.g., "I feel calm and confident. I ask questions before giving advice. Others notice I'm more present."`}
                 rows={4}
-                className={`w-full px-6 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-400 outline-none transition-all duration-200 font-mono resize-none ${
+                className={`w-full px-6 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none ${
                   focusedIndex === index
                     ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
                     : "shadow-[inset_8px_8px_16px_#d1d9e6,inset_-8px_-8px_16px_#ffffff]"
@@ -147,7 +147,7 @@ export default function CompanyInfoPage() {
         </div>
 
         <p className="text-xs text-gray-400 mb-6 font-mono text-center">
-          This is not a goal to check off - it's a vision to guide your journey.
+          This isn't a goal to complete — it's a vision of who you're becoming.
         </p>
 
         {/* Navigation Buttons */}
