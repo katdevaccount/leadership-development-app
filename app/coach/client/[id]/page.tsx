@@ -5,6 +5,7 @@ import { getUser } from '@/lib/supabase/server'
 import { getClientCanvasData, getNudgesSentToClient } from '@/lib/queries/coach'
 import { AppHeader } from '@/components/app-header'
 import { ClientNudgeButton } from '@/components/coach/client-nudge-button'
+import { PadletLinkEditor } from '@/components/coach/padlet-link-editor'
 import { NudgeHistory } from '@/components/coach/nudge-history'
 
 interface PageProps {
@@ -71,6 +72,12 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
               developmentTheme={themes[0]?.theme.theme_text || null}
             />
           </div>
+
+          {/* Padlet Link */}
+          <PadletLinkEditor
+            clientId={client.id}
+            currentUrl={client.padlet_url}
+          />
 
           {/* Nudge History */}
           <NudgeHistory nudges={nudgeHistory} />

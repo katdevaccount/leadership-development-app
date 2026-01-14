@@ -27,6 +27,7 @@ export type Database = {
           email: string
           phone: string | null
           leadership_purpose: string | null
+          padlet_url: string | null
           created_at: string
         }
         Insert: {
@@ -36,6 +37,7 @@ export type Database = {
           email: string
           phone?: string | null
           leadership_purpose?: string | null
+          padlet_url?: string | null
           created_at?: string
         }
         Update: {
@@ -45,6 +47,7 @@ export type Database = {
           email?: string
           phone?: string | null
           leadership_purpose?: string | null
+          padlet_url?: string | null
           created_at?: string
         }
         Relationships: []

@@ -5,6 +5,7 @@ import { LeadershipPurpose } from '@/components/client/leadership-purpose'
 import { ThemeCanvas } from '@/components/client/theme-canvas'
 import { AddThemeButton } from '@/components/client/add-theme-button'
 import { PhoneMissingBanner } from '@/components/client/phone-missing-banner'
+import { PadletLinkBanner } from '@/components/client/padlet-link-banner'
 import { AppHeader } from '@/components/app-header'
 
 export default async function ClientHomePage() {
@@ -25,6 +26,9 @@ export default async function ClientHomePage() {
       <div className="container mx-auto py-6 sm:py-8 px-4 max-w-4xl">
         {/* Phone missing banner */}
         {!profile?.phone && <PhoneMissingBanner />}
+
+        {/* Padlet link banner */}
+        {profile?.padlet_url && <PadletLinkBanner padletUrl={profile.padlet_url} />}
 
         {/* Header */}
         <div className="mb-8">
