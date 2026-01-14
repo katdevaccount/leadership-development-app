@@ -12,7 +12,7 @@ interface NudgeHistoryProps {
 export function NudgeHistory({ nudges }: NudgeHistoryProps) {
   if (nudges.length === 0) {
     return (
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-8 pt-6 border-t border-gray-200/60">
         <h3 className="text-sm font-medium text-gray-500 font-mono mb-3">
           Nudge History
         </h3>
@@ -24,7 +24,7 @@ export function NudgeHistory({ nudges }: NudgeHistoryProps) {
   }
 
   return (
-    <div className="mt-6 pt-6 border-t border-gray-200">
+    <div className="mt-8 pt-6 border-t border-gray-200/60">
       <h3 className="text-sm font-medium text-gray-500 font-mono mb-3">
         Nudge History
       </h3>

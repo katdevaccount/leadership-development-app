@@ -96,7 +96,7 @@ export default function CompanyInfoPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-2xl mx-auto bg-[#f0f3fa] rounded-3xl p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff]"
+        className="w-full max-w-2xl mx-auto bg-[#f0f3fa] rounded-3xl p-5 sm:p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff]"
       >
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-12 h-12 rounded-full bg-[#f0f3fa] flex items-center justify-center mb-4 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
@@ -136,7 +136,7 @@ export default function CompanyInfoPage() {
                 onBlur={() => setFocusedIndex(null)}
                 placeholder={`Start with "I" — e.g., "I feel calm and confident. I ask questions before giving advice. Others notice I'm more present."`}
                 rows={4}
-                className={`w-full px-6 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none ${
+                className={`w-full px-6 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none min-h-[100px] leading-relaxed ${
                   focusedIndex === index
                     ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
                     : "shadow-[inset_8px_8px_16px_#d1d9e6,inset_-8px_-8px_16px_#ffffff]"

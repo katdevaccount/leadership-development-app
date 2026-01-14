@@ -75,7 +75,7 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
   }
 
   return (
-    <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
+    <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
       {/* Theme Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3 flex-1">
@@ -208,7 +208,7 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
               disabled={isDescPending}
               autoFocus
               rows={4}
-              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-sm text-gray-700 placeholder-gray-500 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
+              className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-sm text-gray-700 placeholder-gray-500 font-mono outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none min-h-[100px] leading-relaxed ${
                 isDescPending ? 'opacity-50' : ''
               }`}
             />

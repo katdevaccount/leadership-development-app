@@ -37,7 +37,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-slate-50">
       <AppHeader userName={client.name} userRole="coach" />
 
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <div className="container mx-auto py-6 sm:py-8 px-4 max-w-4xl">
         {/* Back navigation */}
         <Link
           href="/coach/dashboard"
@@ -48,7 +48,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
         </Link>
 
         {/* Client Header */}
-        <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] mb-6">
+        <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] mb-6">
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-700 font-mono">
@@ -77,7 +77,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
         </div>
 
         {/* Leadership Purpose */}
-        <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] mb-6">
+        <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
               <Compass className="h-5 w-5 text-[#8B1E3F]" />
@@ -114,7 +114,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
               {themes.map(({ theme, hypotheses }) => (
                 <div
                   key={theme.id}
-                  className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]"
+                  className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]"
                 >
                   {/* Theme Header */}
                   <div className="flex items-center gap-3 mb-4">
@@ -175,7 +175,7 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
               ))}
             </div>
           ) : (
-            <div className="bg-[#f0f3fa] rounded-2xl p-8 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] text-center">
+            <div className="bg-[#f0f3fa] rounded-2xl p-6 sm:p-8 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] text-center">
               <Target className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-400 font-mono">
                 No development themes set yet.

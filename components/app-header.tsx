@@ -31,7 +31,7 @@ export function AppHeader({ userName, userRole }: AppHeaderProps) {
         </div>
         <div className="flex items-center gap-4">
           {userName && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 font-mono">
+            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 font-mono">
               <div className="w-8 h-8 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
                 <User className="h-4 w-4 text-gray-500" />
               </div>

@@ -45,7 +45,7 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
   }
 
   return (
-    <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
+    <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
@@ -77,7 +77,7 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
             disabled={isPending}
             autoFocus
             rows={3}
-            className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-500 font-mono text-base outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none ${
+            className={`w-full px-4 py-3 bg-[#f0f3fa] rounded-xl text-gray-700 placeholder-gray-500 font-mono text-base outline-none shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] focus:ring-2 focus:ring-[#8B1E3F80] transition-all duration-200 resize-none min-h-[80px] leading-relaxed ${
               isPending ? 'opacity-50' : ''
             }`}
           />

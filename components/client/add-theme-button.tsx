@@ -57,7 +57,7 @@ export function AddThemeButton({ currentThemeCount }: AddThemeButtonProps) {
 
   if (isAdding) {
     return (
-      <div className="bg-[#f0f3fa] rounded-2xl p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] border-2 border-dashed border-[#8B1E3F40]">
+      <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] border-2 border-dashed border-[#8B1E3F40]">
         <h3 className="text-lg font-semibold text-gray-700 font-mono mb-4">
           Add New Theme
         </h3>
@@ -118,7 +118,7 @@ export function AddThemeButton({ currentThemeCount }: AddThemeButtonProps) {
   return (
     <button
       onClick={() => setIsAdding(true)}
-      className="w-full py-6 bg-[#f0f3fa] rounded-2xl border-2 border-dashed border-gray-300 text-gray-500 hover:border-[#8B1E3F] hover:text-[#8B1E3F] shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] transition-all duration-200"
+      className="w-full py-4 sm:py-6 bg-[#f0f3fa] rounded-2xl border-2 border-dashed border-gray-300 text-gray-500 hover:border-[#8B1E3F] hover:text-[#8B1E3F] shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] transition-all duration-200"
     >
       <div className="flex items-center justify-center gap-2 font-mono">
         <Plus className="w-5 h-5" />

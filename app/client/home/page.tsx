@@ -22,13 +22,13 @@ export default async function ClientHomePage() {
     <div className="min-h-screen bg-slate-50">
       <AppHeader userName={profile?.name} userRole="client" />
 
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <div className="container mx-auto py-6 sm:py-8 px-4 max-w-4xl">
         {/* Phone missing banner */}
         {!profile?.phone && <PhoneMissingBanner />}
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-700 font-mono">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-700 font-mono">
             Welcome back{profile?.name ? `, ${profile.name}` : ''}
           </h1>
           <p className="text-gray-500 mt-1 font-mono">

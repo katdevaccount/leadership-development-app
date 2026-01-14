@@ -103,7 +103,7 @@ export default function JobRolePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-2xl mx-auto bg-[#f0f3fa] rounded-3xl p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff]"
+        className="w-full max-w-2xl mx-auto bg-[#f0f3fa] rounded-3xl p-5 sm:p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff]"
       >
         {/* Leadership Purpose Section */}
         <motion.div
@@ -128,7 +128,7 @@ export default function JobRolePage() {
             onBlur={() => setPurposeFocused(false)}
             placeholder="e.g., To create environments where people thrive and grow..."
             rows={3}
-            className={`w-full px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none ${
+            className={`w-full px-5 py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 placeholder-gray-500 outline-none transition-all duration-200 font-mono resize-none min-h-[80px] leading-relaxed ${
               purposeFocused
                 ? "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff] ring-2 ring-[#8B1E3F80]"
                 : "shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]"
