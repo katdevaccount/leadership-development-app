@@ -29,7 +29,8 @@ export function AppHeader({ userName, userRole }: AppHeaderProps) {
               alt="Leadership Development Logo"
               width={40}
               height={40}
-              className="object-contain"
+              className="object-contain border-0 outline-none"
+              style={{ border: 'none', outline: 'none' }}
             />
           </div>
           <h1 className="font-semibold text-base sm:text-lg text-gray-700 font-mono truncate">Leadership Development</h1>
