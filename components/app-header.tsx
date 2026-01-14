@@ -2,6 +2,7 @@
 
 import { useTransition } from 'react'
 import { LogOut, Loader2, User } from 'lucide-react'
+import Image from 'next/image'
 import { signOut } from '@/lib/actions/auth'
 
 interface AppHeaderProps {
@@ -22,6 +23,15 @@ export function AppHeader({ userName, userRole }: AppHeaderProps) {
     <header className="bg-[#f0f3fa] shadow-[0_4px_12px_#d1d9e6]">
       <div className="container mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between max-w-6xl">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <div className="flex-shrink-0">
+            <Image
+              src="/kat-logo-grey-bg.png"
+              alt="Leadership Development Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
+          </div>
           <h1 className="font-semibold text-base sm:text-lg text-gray-700 font-mono truncate">Leadership Development</h1>
           {userRole && (
             <span className="text-xs bg-[#f0f3fa] text-[#8B1E3F] px-2 sm:px-3 py-1 rounded-full capitalize font-mono shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] flex-shrink-0">
