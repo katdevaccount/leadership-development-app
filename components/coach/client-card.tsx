@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { User, Target, Lightbulb, MessageSquare, Phone, ExternalLink, Link2 } from 'lucide-react'
+import { User, Target, Lightbulb, MessageSquare, Phone, ExternalLink, Link2, Trash2 } from 'lucide-react'
 import { SendNudgeModal } from './send-nudge-modal'
 import { AddPadletModal } from './add-padlet-modal'
+import { DeleteClientModal } from './delete-client-modal'
 import type { ClientSummary } from '@/lib/queries/coach'
 
 interface ClientCardProps {
@@ -14,6 +15,7 @@ interface ClientCardProps {
 export function ClientCard({ client }: ClientCardProps) {
   const [isNudgeModalOpen, setIsNudgeModalOpen] = useState(false)
   const [isPadletModalOpen, setIsPadletModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const { user, currentTheme, weeklyActions } = client
 
@@ -91,6 +93,18 @@ export function ClientCard({ client }: ClientCardProps) {
                 Add Padlet
               </button>
             )}
+            {/* Delete Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsDeleteModalOpen(true)
+              }}
+              title="Delete client"
+              className="px-3 py-1.5 bg-[#f0f3fa] rounded-xl text-xs font-mono shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] transition-all duration-200 flex items-center justify-center gap-1.5 text-gray-400 hover:text-red-500"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
           </div>
         </div>
 
@@ -153,6 +167,14 @@ export function ClientCard({ client }: ClientCardProps) {
         clientId={user.id}
         clientName={user.name}
         currentUrl={user.padlet_url}
+      />
+
+      {/* Delete Client Modal */}
+      <DeleteClientModal
+        open={isDeleteModalOpen}
+        onOpenChange={setIsDeleteModalOpen}
+        clientId={user.id}
+        clientName={user.name}
       />
     </>
   )

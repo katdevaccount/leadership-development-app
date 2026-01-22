@@ -532,3 +532,78 @@ export async function deleteClientHypothesis(
     return { success: false, error: 'An unexpected error occurred' }
   }
 }
+
+/**
+ * Deletes a client from the system (coach action).
+ * This removes the client from auth.users, which cascades to delete
+ * all related data (profile, themes, actions, settings, nudge history).
+ *
+ * @param clientId - The client's user ID to delete
+ * @returns ActionResult with success/error status
+ */
+export async function deleteClient(clientId: string): Promise<ActionResult> {
+  try {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(clientId)) {
+      return { success: false, error: 'Invalid client ID' }
+    }
+
+    // Get authenticated user
+    const user = await getUser()
+    if (!user) {
+      return { success: false, error: 'Not authenticated' }
+    }
+
+    const supabase = await createClient()
+
+    // Verify user is a coach
+    const { data: coachUser, error: coachError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (coachError || !coachUser) {
+      return { success: false, error: 'Failed to verify permissions' }
+    }
+
+    if (coachUser.role !== 'coach') {
+      return { success: false, error: 'Only coaches can delete clients' }
+    }
+
+    // Verify the target exists and is a client (not a coach)
+    const adminClient = createAdminClient()
+    const { data: clientUser, error: clientError } = await adminClient
+      .from('users')
+      .select('role, name')
+      .eq('id', clientId)
+      .single()
+
+    if (clientError || !clientUser) {
+      return { success: false, error: 'Client not found' }
+    }
+
+    if (clientUser.role !== 'client') {
+      return { success: false, error: 'Cannot delete coaches' }
+    }
+
+    // Delete the user from auth.users - this cascades to public.users
+    // and all related tables (themes, actions, settings, nudges)
+    const { error: deleteError } = await adminClient.auth.admin.deleteUser(clientId)
+
+    if (deleteError) {
+      console.error('Error deleting client:', deleteError)
+      return { success: false, error: 'Failed to delete client' }
+    }
+
+    // Revalidate the dashboard
+    revalidatePath('/coach/dashboard')
+
+    return { success: true }
+  } catch (err) {
+    if (err instanceof Error) {
+      return { success: false, error: err.message }
+    }
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
