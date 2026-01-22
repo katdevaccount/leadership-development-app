@@ -4,14 +4,16 @@ import { useState, useTransition } from 'react'
 import { Plus, Loader2 } from 'lucide-react'
 import { HypothesisItem } from './hypothesis-item'
 import { addHypothesis } from '@/lib/actions/canvas'
+import { addClientHypothesis } from '@/lib/actions/coach'
 import type { WeeklyAction } from '@/lib/supabase/types'
 
 interface HypothesesListProps {
   themeId: string
   hypotheses: WeeklyAction[]
+  clientId?: string // When provided, use coach actions instead
 }
 
-export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
+export function HypothesesList({ themeId, hypotheses, clientId }: HypothesesListProps) {
   const [isAdding, setIsAdding] = useState(false)
   const [newText, setNewText] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -22,7 +24,9 @@ export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
 
     setError(null)
     startTransition(async () => {
-      const result = await addHypothesis(themeId, newText.trim())
+      const result = clientId
+        ? await addClientHypothesis(clientId, themeId, newText.trim())
+        : await addHypothesis(themeId, newText.trim())
 
       if (!result.success) {
         setError(result.error)
@@ -60,7 +64,7 @@ export function HypothesesList({ themeId, hypotheses }: HypothesesListProps) {
       {hypotheses.length > 0 && (
         <ul className="space-y-2">
           {hypotheses.map((hypothesis) => (
-            <HypothesisItem key={hypothesis.id} hypothesis={hypothesis} />
+            <HypothesisItem key={hypothesis.id} hypothesis={hypothesis} clientId={clientId} />
           ))}
         </ul>
       )}

@@ -1,12 +1,14 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Compass, Target, Sparkles, MessageCircle, Phone } from 'lucide-react'
+import { ArrowLeft, Target, Phone } from 'lucide-react'
 import { getUser } from '@/lib/supabase/server'
 import { getClientCanvasData, getNudgesSentToClient } from '@/lib/queries/coach'
 import { AppHeader } from '@/components/app-header'
 import { ClientNudgeButton } from '@/components/coach/client-nudge-button'
 import { PadletLinkEditor } from '@/components/coach/padlet-link-editor'
 import { NudgeHistory } from '@/components/coach/nudge-history'
+import { LeadershipPurpose } from '@/components/client/leadership-purpose'
+import { ThemeCanvas } from '@/components/client/theme-canvas'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -83,26 +85,12 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
           <NudgeHistory nudges={nudgeHistory} />
         </div>
 
-        {/* Leadership Purpose */}
-        <div className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
-              <Compass className="h-5 w-5 text-[#8B1E3F]" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-700 font-mono">Leadership Purpose</h2>
-              <p className="text-xs text-gray-400 font-mono">What kind of leader do they want to become?</p>
-            </div>
-          </div>
-          {client.leadership_purpose ? (
-            <div className="px-4 py-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
-              <p className="text-gray-700 font-mono">{client.leadership_purpose}</p>
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400 font-mono italic">
-              No leadership purpose set yet.
-            </p>
-          )}
+        {/* Leadership Purpose - Editable by coach */}
+        <div className="mb-6">
+          <LeadershipPurpose
+            purpose={client.leadership_purpose}
+            clientId={client.id}
+          />
         </div>
 
         {/* Development Themes */}
@@ -119,66 +107,12 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
           {themes.length > 0 ? (
             <div className="space-y-6">
               {themes.map(({ theme, hypotheses }) => (
-                <div
+                <ThemeCanvas
                   key={theme.id}
-                  className="bg-[#f0f3fa] rounded-2xl p-4 sm:p-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]"
-                >
-                  {/* Theme Header */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-[#f0f3fa] flex items-center justify-center shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff]">
-                      <Target className="h-5 w-5 text-[#8B1E3F]" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-700 font-mono">
-                      {theme.theme_text}
-                    </h3>
-                  </div>
-
-                  {/* Success Description */}
-                  <div className="mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="w-4 h-4 text-[#8B1E3F]" />
-                      <h4 className="text-sm font-semibold text-gray-600 font-mono">Envisioned Future</h4>
-                    </div>
-                    {theme.success_description ? (
-                      <div className="px-4 py-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
-                        <p className="text-sm text-gray-700 font-mono whitespace-pre-wrap">
-                          {theme.success_description}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-400 font-mono italic">
-                        No vision described yet.
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Hypotheses */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <MessageCircle className="w-4 h-4 text-[#8B1E3F]" />
-                      <h4 className="text-sm font-semibold text-gray-600 font-mono">
-                        Ideas & Experiments ({hypotheses.length})
-                      </h4>
-                    </div>
-                    {hypotheses.length > 0 ? (
-                      <ul className="space-y-1 px-4 py-3 bg-[#f0f3fa] rounded-xl shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff]">
-                        {hypotheses.map((hypothesis) => (
-                          <li
-                            key={hypothesis.id}
-                            className="flex items-start gap-2 text-sm text-gray-700 font-mono"
-                          >
-                            <span className="text-[#8B1E3F] mt-0.5">&bull;</span>
-                            <span>{hypothesis.action_text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm text-gray-400 font-mono italic">
-                        No ideas captured yet.
-                      </p>
-                    )}
-                  </div>
-                </div>
+                  theme={theme}
+                  hypotheses={hypotheses}
+                  clientId={client.id}
+                />
               ))}
             </div>
           ) : (

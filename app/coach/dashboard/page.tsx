@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import { Users, Lightbulb, AlertCircle } from 'lucide-react'
+import Link from 'next/link'
+import { Users, Lightbulb, AlertCircle, Settings } from 'lucide-react'
 import { getUser } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/server'
 import {
@@ -41,11 +42,20 @@ export default async function CoachDashboardPage() {
 
       <div className="container mx-auto py-8 px-4 max-w-6xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-700 font-mono">Coach Dashboard</h1>
-          <p className="text-gray-500 mt-1 font-mono">
-            {profile.name ? `Welcome back, ${profile.name}` : 'Manage your clients'}
-          </p>
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-700 font-mono">Coach Dashboard</h1>
+            <p className="text-gray-500 mt-1 font-mono">
+              {profile.name ? `Welcome back, ${profile.name}` : 'Manage your clients'}
+            </p>
+          </div>
+          <Link
+            href="/coach/settings/onboarding"
+            className="flex items-center gap-2 px-4 py-2 bg-[#f0f3fa] rounded-xl text-sm font-mono text-gray-600 shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] transition-all"
+          >
+            <Settings className="w-4 h-4" />
+            Settings
+          </Link>
         </div>
 
         {/* Stats Overview */}

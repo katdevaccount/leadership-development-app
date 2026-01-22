@@ -3,12 +3,14 @@
 import { useState, useTransition } from 'react'
 import { Compass, Pencil, Check, X, Loader2 } from 'lucide-react'
 import { updateLeadershipPurpose } from '@/lib/actions/canvas'
+import { updateClientLeadershipPurpose } from '@/lib/actions/coach'
 
 interface LeadershipPurposeProps {
   purpose: string | null
+  clientId?: string // When provided, use coach actions instead
 }
 
-export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
+export function LeadershipPurpose({ purpose, clientId }: LeadershipPurposeProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(purpose || '')
   const [isPending, startTransition] = useTransition()
@@ -17,7 +19,10 @@ export function LeadershipPurpose({ purpose }: LeadershipPurposeProps) {
   const handleSave = () => {
     setError(null)
     startTransition(async () => {
-      const result = await updateLeadershipPurpose(editValue)
+      // Use coach action if clientId is provided, otherwise use client action
+      const result = clientId
+        ? await updateClientLeadershipPurpose(clientId, editValue)
+        : await updateLeadershipPurpose(editValue)
 
       if (!result.success) {
         setError(result.error)

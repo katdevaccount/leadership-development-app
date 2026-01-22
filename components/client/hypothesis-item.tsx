@@ -3,13 +3,15 @@
 import { useState, useTransition } from 'react'
 import { Trash2, Pencil, Check, X, Loader2 } from 'lucide-react'
 import { updateHypothesis, deleteHypothesis } from '@/lib/actions/canvas'
+import { updateClientHypothesis, deleteClientHypothesis } from '@/lib/actions/coach'
 import type { WeeklyAction } from '@/lib/supabase/types'
 
 interface HypothesisItemProps {
   hypothesis: WeeklyAction
+  clientId?: string // When provided, use coach actions instead
 }
 
-export function HypothesisItem({ hypothesis }: HypothesisItemProps) {
+export function HypothesisItem({ hypothesis, clientId }: HypothesisItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editText, setEditText] = useState(hypothesis.action_text)
   const [isPending, startTransition] = useTransition()
@@ -22,7 +24,9 @@ export function HypothesisItem({ hypothesis }: HypothesisItemProps) {
 
     setError(null)
     startTransition(async () => {
-      const result = await updateHypothesis(hypothesis.id, editText.trim())
+      const result = clientId
+        ? await updateClientHypothesis(clientId, hypothesis.id, editText.trim())
+        : await updateHypothesis(hypothesis.id, editText.trim())
 
       if (!result.success) {
         setError(result.error)
@@ -46,7 +50,9 @@ export function HypothesisItem({ hypothesis }: HypothesisItemProps) {
     setIsDeleted(true)
 
     startDeleteTransition(async () => {
-      const result = await deleteHypothesis(hypothesis.id)
+      const result = clientId
+        ? await deleteClientHypothesis(clientId, hypothesis.id)
+        : await deleteHypothesis(hypothesis.id)
 
       if (!result.success) {
         setIsDeleted(false)

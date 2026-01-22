@@ -220,6 +220,35 @@ export type Database = {
           }
         ]
       }
+      onboarding_copy: {
+        Row: {
+          page_key: string
+          copy_data: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          page_key: string
+          copy_data?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          page_key?: string
+          copy_data?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_copy_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -330,3 +359,7 @@ export type SettingsUpdate = Database['public']['Tables']['settings']['Update']
 
 export type NudgeSent = Database['public']['Tables']['nudges_sent']['Row']
 export type NudgeSentInsert = Database['public']['Tables']['nudges_sent']['Insert']
+
+export type OnboardingCopyRow = Database['public']['Tables']['onboarding_copy']['Row']
+export type OnboardingCopyInsert = Database['public']['Tables']['onboarding_copy']['Insert']
+export type OnboardingCopyUpdate = Database['public']['Tables']['onboarding_copy']['Update']

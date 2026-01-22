@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { Target, Pencil, Check, X, Loader2, Trash2, Sparkles } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { updateThemeName, updateSuccessDescription, deleteTheme } from '@/lib/actions/canvas'
+import { updateClientThemeName, updateClientSuccessDescription } from '@/lib/actions/coach'
 import { HypothesesList } from './hypotheses-list'
 import type { DevelopmentTheme, WeeklyAction } from '@/lib/supabase/types'
 
@@ -11,9 +12,10 @@ interface ThemeCanvasProps {
   theme: DevelopmentTheme
   hypotheses: WeeklyAction[]
   onDelete?: () => void
+  clientId?: string // When provided, use coach actions instead
 }
 
-export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
+export function ThemeCanvas({ theme, hypotheses, onDelete, clientId }: ThemeCanvasProps) {
   // Theme name editing state
   const [isEditingName, setIsEditingName] = useState(false)
   const [nameValue, setNameValue] = useState(theme.theme_text)
@@ -35,7 +37,9 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
 
     setNameError(null)
     startNameTransition(async () => {
-      const result = await updateThemeName(theme.id, nameValue.trim())
+      const result = clientId
+        ? await updateClientThemeName(clientId, theme.id, nameValue.trim())
+        : await updateThemeName(theme.id, nameValue.trim())
 
       if (!result.success) {
         setNameError(result.error)
@@ -49,7 +53,9 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
   const handleSaveDesc = () => {
     setDescError(null)
     startDescTransition(async () => {
-      const result = await updateSuccessDescription(theme.id, descValue)
+      const result = clientId
+        ? await updateClientSuccessDescription(clientId, theme.id, descValue)
+        : await updateSuccessDescription(theme.id, descValue)
 
       if (!result.success) {
         setDescError(result.error)
@@ -266,7 +272,7 @@ export function ThemeCanvas({ theme, hypotheses, onDelete }: ThemeCanvasProps) {
       <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-5" />
 
       {/* Hypotheses */}
-      <HypothesesList themeId={theme.id} hypotheses={hypotheses} />
+      <HypothesesList themeId={theme.id} hypotheses={hypotheses} clientId={clientId} />
     </div>
   )
 }
