@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUser } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient, isCoach } from '@/lib/supabase/admin'
+import { createAdminClient, isCoach, ensureCoachRoleIfInAllowlist } from '@/lib/supabase/admin'
 import { sendNudgeSchema } from '@/lib/validations/schemas'
 
 /**
@@ -35,9 +35,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Verify user is a coach (using admin client to bypass RLS for role check)
-    const userIsCoach = await isCoach(user.id)
-
+    // 2. Verify user is a coach (sync DB role from allowlist if needed)
+    let userIsCoach = await isCoach(user.id)
+    if (!userIsCoach && user.email) {
+      await ensureCoachRoleIfInAllowlist(user.id, user.email)
+      userIsCoach = await isCoach(user.id)
+    }
     if (!userIsCoach) {
       return NextResponse.json(
         { error: 'Forbidden', message: 'Only coaches can send nudges' },

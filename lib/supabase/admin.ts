@@ -1,5 +1,6 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/supabase/types'
+import { isCoachEmail } from '@/lib/constants'
 
 /**
  * Creates a Supabase client with service role privileges.
@@ -97,4 +98,26 @@ export async function getUserById(userId: string) {
   }
 
   return data
+}
+
+/**
+ * If the user's email is in the coach allowlist (COACH_EMAILS), ensures
+ * public.users has role = 'coach' for that user. Use when DB role might
+ * be stale (e.g. user created as client, then added to allowlist).
+ * Returns true if we updated the row (or it was already coach), false if
+ * email is not in allowlist.
+ */
+export async function ensureCoachRoleIfInAllowlist(
+  userId: string,
+  email: string | undefined
+): Promise<boolean> {
+  if (!email || !isCoachEmail(email)) return false
+
+  const supabase = createAdminClient()
+  const { error } = await supabase
+    .from('users')
+    .update({ role: 'coach' })
+    .eq('id', userId)
+
+  return !error
 }

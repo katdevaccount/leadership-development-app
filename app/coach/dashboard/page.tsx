@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Users, Lightbulb, AlertCircle, Settings } from 'lucide-react'
 import { getUser } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/server'
+import { ensureCoachRoleIfInAllowlist } from '@/lib/supabase/admin'
 import {
   getAllClientSummaries,
   getCoachDashboardStats,
@@ -18,13 +19,23 @@ export default async function CoachDashboardPage() {
     redirect('/login')
   }
 
-  // Verify user is a coach
+  // Verify user is a coach (sync DB role from allowlist if needed)
   const supabase = await createClient()
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('users')
     .select('role, name')
     .eq('id', user.id)
     .single()
+
+  if ((!profile || profile.role !== 'coach') && user.email) {
+    await ensureCoachRoleIfInAllowlist(user.id, user.email)
+    const refetch = await supabase
+      .from('users')
+      .select('role, name')
+      .eq('id', user.id)
+      .single()
+    profile = refetch.data
+  }
 
   if (!profile || profile.role !== 'coach') {
     redirect('/client/home')
