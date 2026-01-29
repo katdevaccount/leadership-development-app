@@ -3,6 +3,7 @@ import { getUser } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient, isCoach, ensureCoachRoleIfInAllowlist } from '@/lib/supabase/admin'
 import { sendNudgeSchema } from '@/lib/validations/schemas'
+import { sendSms } from '@/lib/twilio/send-sms'
 
 /**
  * POST /api/send-nudge
@@ -20,7 +21,7 @@ import { sendNudgeSchema } from '@/lib/validations/schemas'
  * 2. Verify user is a coach
  * 3. Fetch client's phone number
  * 4. Insert record into nudges_sent
- * 5. POST to n8n webhook (if configured)
+ * 5. Send SMS via Twilio
  * 6. Return success/error
  */
 export async function POST(request: NextRequest) {
@@ -116,49 +117,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. POST to n8n webhook
-    const webhookUrl = process.env.N8N_SEND_NUDGE_WEBHOOK || 'https://n8n-familyconnection.agentglu.agency/webhook/send-nudge'
-    let webhookSuccess = false
-    let webhookError: string | null = null
-
-    try {
-      const webhookPayload = {
-        type: 'manual_nudge',
-        nudge_id: nudge.id,
-        client_id: clientId,
-        client_name: client.name,
-        phone: client.phone,
-        message: messageText,
-      }
-
-      const webhookResponse = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookPayload),
-      })
-
-      if (webhookResponse.ok) {
-        webhookSuccess = true
-      } else {
-        webhookError = `Webhook returned status ${webhookResponse.status}`
-        console.error('Webhook error:', webhookError)
-      }
-    } catch (err) {
-      webhookError = err instanceof Error ? err.message : 'Unknown webhook error'
-      console.error('Webhook error:', webhookError)
+    // 5. Send SMS via Twilio
+    const smsResult = await sendSms(client.phone, messageText)
+    if ('error' in smsResult) {
+      console.error('Send-nudge Twilio error:', smsResult.error)
     }
 
-    // 6. Return success response
+    // 6. Return success response (200 even if SMS failed; nudge is recorded)
     return NextResponse.json({
       success: true,
       message: 'Nudge recorded successfully',
       data: {
         nudge_id: nudge.id,
         sent_at: nudge.sent_at,
-        webhook_sent: webhookSuccess,
-        webhook_error: webhookError,
+        ...('sid' in smsResult ? { sms_sid: smsResult.sid } : { sms_error: smsResult.error }),
       },
     })
   } catch (error) {

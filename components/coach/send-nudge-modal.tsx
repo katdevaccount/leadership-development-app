@@ -25,6 +25,7 @@ export function SendNudgeModal({
   const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [successSmsFailed, setSuccessSmsFailed] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [isFocused, setIsFocused] = useState(false)
 
@@ -67,10 +68,13 @@ export function SendNudgeModal({
 
         setSuccess(true)
         setMessage('')
+        const smsFailed = data?.data?.sms_error != null
+        setSuccessSmsFailed(smsFailed)
 
         // Close modal after showing success briefly
         setTimeout(() => {
           setSuccess(false)
+          setSuccessSmsFailed(false)
           onOpenChange(false)
         }, 1500)
       } catch (err) {
@@ -85,6 +89,7 @@ export function SendNudgeModal({
       setMessage('')
       setError(null)
       setSuccess(false)
+      setSuccessSmsFailed(false)
     }
     onOpenChange(newOpen)
   }
@@ -114,7 +119,9 @@ export function SendNudgeModal({
             <div className="w-16 h-16 rounded-full bg-[#f0f3fa] flex items-center justify-center mx-auto mb-4 shadow-[inset_6px_6px_12px_#d1d9e6,inset_-6px_-6px_12px_#ffffff]">
               <CheckCircle className="h-8 w-8 text-[#8B1E3F]" />
             </div>
-            <p className="text-lg font-semibold text-gray-700 font-mono">Nudge sent!</p>
+            <p className="text-lg font-semibold text-gray-700 font-mono">
+              {successSmsFailed ? 'Nudge recorded, but the text message could not be sent.' : 'Nudge sent!'}
+            </p>
           </div>
         ) : (
           <>
