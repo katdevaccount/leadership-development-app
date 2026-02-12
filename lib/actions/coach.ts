@@ -534,6 +534,74 @@ export async function deleteClientHypothesis(
 }
 
 /**
+ * Creates a new development theme for a client (coach action).
+ *
+ * @param clientId - The client's user ID
+ * @param themeText - The theme name (1-4 words)
+ * @returns ActionResult with the new theme ID
+ */
+export async function createClientTheme(
+  clientId: string,
+  themeText: string
+): Promise<ActionResult<{ id: string }>> {
+  try {
+    if (!themeText || themeText.trim().length === 0) {
+      return { success: false, error: 'Theme name is required' }
+    }
+    if (themeText.length > 100) {
+      return { success: false, error: 'Theme name must be less than 100 characters' }
+    }
+
+    const authResult = await verifyCoachAccess(clientId)
+    if (!authResult.success) {
+      return { success: false, error: authResult.error }
+    }
+
+    // Check how many themes the client already has
+    const { data: existingThemes, error: countError } = await authResult.adminClient
+      .from('development_themes')
+      .select('id')
+      .eq('user_id', clientId)
+
+    if (countError) {
+      console.error('Error counting client themes:', countError)
+      return { success: false, error: 'Failed to check existing themes' }
+    }
+
+    if (existingThemes && existingThemes.length >= 3) {
+      return { success: false, error: 'Maximum of 3 themes reached' }
+    }
+
+    const nextOrder = (existingThemes?.length || 0) + 1
+
+    const { data, error } = await authResult.adminClient
+      .from('development_themes')
+      .insert({
+        user_id: clientId,
+        theme_text: themeText.trim(),
+        theme_order: nextOrder,
+      })
+      .select('id')
+      .single()
+
+    if (error) {
+      console.error('Error creating client theme:', error)
+      return { success: false, error: 'Failed to create theme' }
+    }
+
+    revalidatePath(`/coach/client/${clientId}`)
+    revalidatePath('/client/home')
+
+    return { success: true, data: { id: data.id } }
+  } catch (err) {
+    if (err instanceof Error) {
+      return { success: false, error: err.message }
+    }
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+/**
  * Deletes a client from the system (coach action).
  * This removes the client from auth.users, which cascades to delete
  * all related data (profile, themes, actions, settings, nudge history).

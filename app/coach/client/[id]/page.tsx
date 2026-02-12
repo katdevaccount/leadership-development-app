@@ -9,6 +9,7 @@ import { PadletLinkEditor } from '@/components/coach/padlet-link-editor'
 import { NudgeHistory } from '@/components/coach/nudge-history'
 import { LeadershipPurpose } from '@/components/client/leadership-purpose'
 import { ThemeCanvas } from '@/components/client/theme-canvas'
+import { AddThemeButtonCoach } from '@/components/coach/add-theme-button-coach'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -123,6 +124,11 @@ export default async function CoachClientDetailPage({ params }: PageProps) {
               </p>
             </div>
           )}
+
+          <AddThemeButtonCoach
+            clientId={client.id}
+            currentThemeCount={themes.length}
+          />
         </div>
       </div>
     </div>
